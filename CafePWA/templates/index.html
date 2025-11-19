@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E.S. Café Co – Preorder Online</title>
+    <meta name="description" content="Pre-order food and drinks from E.S. Café Co. Browse the menu and collect your order at your chosen time.">
+    <meta name="keywords" content="E.S. Café, preorder, food, drinks, student lunch">
+    <meta name="author" content="Evan Sergi">
+    <link rel="icon" href="/static/images/logo.png" type="image/png">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+  <!-- ---------- Header and Navigation ---------- -->
+  <header class="site-header">
+    <div class="container header-inner">
+      
+      <!-- ---------- Brand Section (Logo + Name) ---------- -->
+      <div class="brand">
+        <a href="index.html">
+          <img src="/static/images/logo.png" alt="E.S. Café Co logo" class="logo">
+        </a>
+        <span class="brand-name">E.S. Café Co</span>
+      </div>
+
+      <!-- ---------- Navigation Menu ---------- -->
+      <nav aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="about.html">About</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- ---------- Hero Section ---------- -->
+    <section class="hero">
+      <img src="/static/images/hero.jpg" alt="Cafe table with coffee and plants">
+      <div class="hero-overlay container">
+        <h1>Ready when you are!</h1>
+        <p class="lead">Skip the line, sip on time.</p>
+      </div>
+    </section>
+
+  <!-- ---------- Tagline Section ---------- -->
+    <section class="tagline">
+      <div class="container">
+        <h2>Fuel your day, the E.S way.</h2>
+      </div>
+    </section>
+
+  <!-- ---------- Main Content: Containers & Cards ---------- -->
+  <main class="container">
+    <section class="cards grid">
+      <article class="card">
+        <h2>Opening Hours</h2>
+        <table class="hours">
+          <tr><th>Mon–Fri</th><td>7:00–15:00</td></tr>
+          <tr><th>Sat-Sun</th><td>8:00–16:00</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h2>Location</h2>
+        <p>824 Golflinks Terrace,<br>Albury NSW 2640</p>
+        <p><a href="https://maps.app.goo.gl/MpvQjLKQTUUq8Hkc8" target="_blank" rel="noopener">View on Maps</a></p>
+        <p class="note">Pick up at the counter. Park on the street.</p>
+      </article>
+    </section>
+  </main>
+
+    <!-- ---------- Feedback Button ---------- -->
+  <section class="container" style="text-align: center; margin-top: 1.5rem;">
+  <h2>Tell us what you think</h2>
+  <p class="note">This form sends your message to the server.</p>
+
+  <form id="feedback-form" style="max-width: 400px; margin: 0 auto;">
+    <textarea id="feedback-message" name="feedback" rows="3" required></textarea><br>
+    <button type="submit" class="add-btn">Send feedback</button>
+  </form>
+
+  <p id="feedback-response" class="note" style="margin-top: 0.5rem;"></p>
+</section>
+
+  <!-- ---------- Footer Section ---------- -->
+  <footer class="site-footer">
+  <div class="container">
+    © 2025 AppleProductions Co • <a href="#">Privacy</a>
+  </div>
+  </footer>
+  
+  <!-- ---------- Script: Send form data to Flask and display response ---------- -->
+  <script>
+    const form = document.getElementById('feedback-form');
+    const textarea = document.getElementById('feedback-message');
+    const output = document.getElementById('feedback-response');
+
+    // Handle form submission
+    form.addEventListener('submit', function (event) {
+      event.preventDefault(); // Stop page reload
+
+      const message = textarea.value.trim();
+
+      // Send message to Flask using fetch()
+      fetch("http://127.0.0.1:5050/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      })
+        .then(res => res.json())
+        .then(data => {
+          // Show Flask's reply
+          output.textContent = data.response || data.error;
+          textarea.value = ""; // Clear form after sending
+        })
+        .catch(() => {
+          output.textContent = "Could not reach the server. Is Flask running?";
+        });
+    });
+  </script>
+</body>
+</html>
